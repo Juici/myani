@@ -1,0 +1,22 @@
+sudo: false
+language: rust
+cache: cargo
+
+rust:
+  - stable
+  - beta
+  - nightly
+
+matrix:
+  include:
+    - rust: nightly
+      before-script:
+        - rustup component add rustfmt-preview
+        - cargo install clippy --force
+      script:
+        - cargo fmt -- --write-mode=diff
+        - cargo clippy -- -D clippy
+
+script:
+  - cargo build --verbose
+  - cargo test --verbose
